@@ -10,6 +10,27 @@ from jose import jwt, JWTError
 from database import SessionLocal, engine, Base
 import models, schemas, auth
 
+from sqlalchemy.orm import Session
+
+def create_default_user():
+    db = SessionLocal()
+    default_email = "admin@govconnect.com"
+    default_password = "admin123"
+    
+    existing = db.query(models.User).filter(models.User.email == default_email).first()
+    if not existing:
+        hashed = auth.hash_password(default_password)
+        new_user = models.User(email=default_email, hashed_password=hashed)
+        db.add(new_user)
+        db.commit()
+        print("✅ Default admin user created.")
+    else:
+        print("ℹ️ Default user already exists.")
+    db.close()
+
+create_default_user()
+
+
 # Setup app
 app = FastAPI()
 
