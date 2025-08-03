@@ -13,9 +13,11 @@ import models, schemas, auth
 # Setup app
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this in production
+    allow_origins=["*"],  # or list your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
